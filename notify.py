@@ -16,6 +16,7 @@ import base64
 import urllib.parse
 from requests.adapters import HTTPAdapter
 from urllib3.util import Retry
+from sqlalchemy import create_engine
 import re
 
 # 通知服务
@@ -45,6 +46,11 @@ if "DD_BOT_ACCESS_TOKEN" in os.environ and os.environ["DD_BOT_ACCESS_TOKEN"] and
 if "QYWX_APP" in os.environ and os.environ["QYWX_QUANT"]:
     QYWX_APP = os.environ["QYWX_QUANT"]
 
+# pg数据库配置
+if "PG_CONF" in os.environ and os.environ["PG_CONF"]:
+    PG_CONF = os.environ["PG_CONF"]
+    print(PG_CONF)
+
 if BARK:
     notify_mode.append('bark')
     print("BARK 推送打开")
@@ -60,6 +66,12 @@ if DD_BOT_ACCESS_TOKEN and DD_BOT_SECRET:
 if QYWX_APP:
     notify_mode.append('qywxapp_bot')
     print("企业微信应用 推送打开")
+
+def pg_engine_finance():
+    if PG_CONF is None or PG_CONF == '':
+        print("pg数据库未配置，取消推送。")
+    username, password, host, port, db_name = PG_CONF.split(',.')
+    return create_engine('postgresql://{}:{}@{}:{}/{}'.format(username, password, host, port, db_name))
 
 def bark(title, content):
     print("\n")
