@@ -70,7 +70,7 @@ if QYWX_APP:
 def pg_engine_finance():
     if PG_CONF is None or PG_CONF == '':
         print("pg数据库未配置，取消推送。")
-    username, password, host, port, db_name = PG_CONF.split(',.')
+    username, password, host, port, db_name = PG_CONF.split(',')
     return create_engine('postgresql://{}:{}@{}:{}/{}'.format(username, password, host, port, db_name))
 
 def bark(title, content):
