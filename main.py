@@ -2,13 +2,8 @@
 cron: 6 6 6 * *
 new Env('量化--测试');
 """
-def print_hi(name):
-    # Use a breakpoint in the code line below to debug your script.
-    print(f'Hi, {name}')  # Press Ctrl+F8 to toggle the breakpoint.
-
-
+from notify import send
 # Press the green button in the gutter to run the script.
 if __name__ == '__main__':
-
-    print_hi('PyCharm')
+    send("量表指标", "测试机内容", "仅供参考")
 # See PyCharm help at https://www.jetbrains.com/help/pycharm/

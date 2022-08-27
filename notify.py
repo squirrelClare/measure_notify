@@ -42,8 +42,8 @@ if "TG_BOT_TOKEN" in os.environ and os.environ["TG_BOT_TOKEN"] and "TG_USER_ID" 
 if "DD_BOT_ACCESS_TOKEN" in os.environ and os.environ["DD_BOT_ACCESS_TOKEN"] and "DD_BOT_SECRET" in os.environ and os.environ["DD_BOT_SECRET"]:
     DD_BOT_ACCESS_TOKEN = os.environ["DD_BOT_ACCESS_TOKEN"]
     DD_BOT_SECRET = os.environ["DD_BOT_SECRET"]
-if "QYWX_APP" in os.environ and os.environ["QYWX_APP"]:
-    QYWX_APP = os.environ["QYWX_APP"]
+if "QYWX_APP" in os.environ and os.environ["QYWX_QUANT"]:
+    QYWX_APP = os.environ["QYWX_QUANT"]
 
 if BARK:
     notify_mode.append('bark')
