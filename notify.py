@@ -49,7 +49,7 @@ if "QYWX_APP" in os.environ and os.environ["QYWX_QUANT"]:
 # pg数据库配置
 if "PG_CONF" in os.environ and os.environ["PG_CONF"]:
     PG_CONF = os.environ["PG_CONF"]
-    print(PG_CONF)
+    print("pg数据库配置已载入。")
 
 if BARK:
     notify_mode.append('bark')
