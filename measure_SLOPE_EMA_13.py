@@ -15,7 +15,7 @@ if __name__ == '__main__':
     # 获取最近一个交易日
     sql_cal_day ='''select * from t_trade_cal where cal_date>'{0}' and is_open=true order by cal_date '''.format(pre_10_day)
     cal_day_info = pd.read_sql_query(sql_cal_day, engine_finance_db)
-    last_cal_day = cal_day_info['cal_date'][-1]
+    last_cal_day = cal_day_info['cal_date'].values[-1]
 
     #   抽取特征数据
     sql_feature ='''select company, trade_date, field, value 
