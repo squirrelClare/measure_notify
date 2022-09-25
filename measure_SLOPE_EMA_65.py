@@ -1,6 +1,6 @@
 """
-cron: 0 31 8 * * ?
-new Env('量化--EMA13近10日的斜率');
+cron: 10 31 8 * * ?
+new Env('量化--EMA65近20日的斜率');
 """
 
 import pandas as pd
@@ -20,6 +20,6 @@ if __name__ == '__main__':
     #   抽取特征数据
     sql_feature ='''select company, trade_date, field, value 
     from (select * from t_feature_numberic where field ='SLOPE_EMA_13' and trade_date ='{0}' and value > 0 limit 200) a left join t_tscode_company b on a.ts_code =b.ts_code order 
-    by value desc'''.format(last_cal_day)
+    by value desc '''.format(last_cal_day)
     feature_info = pd.read_sql_query(sql_feature, engine_finance_db)
-    send("趋势斜率(SLOPE_EMA_13)", feature_info.to_html(), "{}日EMA13近10日的斜率，最多展示前一个交易日斜率大于0的200家企业".format(current_time))
+    send("趋势斜率(SLOPE_EMA_65)", feature_info.to_html(), "{}日EMA65近20日的斜率，最多展示前一个交易日斜率大于0的200家企业".format(current_time))
