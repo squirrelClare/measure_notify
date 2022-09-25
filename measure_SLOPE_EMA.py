@@ -29,6 +29,6 @@ if __name__ == '__main__':
     by value desc'''.format(last_cal_day)
     feature_info_ema13_slope = pd.read_sql_query(sql_feature_ema13_slope, engine_finance_db)
 
-    feature_info = pd.merge(feature_info_ema65_slope, feature_info_ema13_slope, on='company')
+    feature_info = pd.merge(feature_info_ema65_slope, feature_info_ema13_slope, on=['company', 'trade_date'])
 
     send("趋势斜率", feature_info.to_html(), "{}日趋势斜率，最多展示前一个交易日斜率大于0的200家企业，长期确实斜率为EMA65近20日斜率，短期趋势为EMA13近10日斜率".format(current_time))
