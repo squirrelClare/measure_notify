@@ -31,4 +31,4 @@ if __name__ == '__main__':
 
     feature_info = pd.merge(feature_info_ema65_slope, feature_info_ema13_slope, on=['company', 'trade_date'])
 
-    send("趋势斜率", feature_info.to_html(), "{}日趋势斜率，最多展示前一个交易日斜率大于0的200家企业，长期趋势斜率为EMA65近20日斜率，短期趋势为EMA13近10日斜率".format(current_time))
+    send("趋势斜率", feature_info.to_html(), "{}日趋势斜率，最多展示前一个交易日长期趋势斜率大于0的200家企业，长期趋势斜率为EMA65近20日斜率，短期趋势为EMA13近10日斜率".format(current_time))
