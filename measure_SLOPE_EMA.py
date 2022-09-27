@@ -29,6 +29,12 @@ if __name__ == '__main__':
     by value desc'''.format(last_cal_day)
     feature_info_ema13_slope = pd.read_sql_query(sql_feature_ema13_slope, engine_finance_db)
 
-    feature_info = pd.merge(feature_info_ema65_slope, feature_info_ema13_slope, on=['company', 'trade_date'])
+    #   交易量排名
+    sql_amount_rank = "select company, amount_rank from (select ts_code, RANK() OVER (ORDER BY amount DESC) as amount_rank  from t_daily_info where trade_date ='{0}' limit 800) a left join t_tscode_company b on a.ts_code =b.ts_code"\
+        .format(last_cal_day)
+    frame_amount_rank = pd.read_sql_query(sql_amount_rank, engine_finance_db)
 
-    send("趋势斜率", feature_info.to_html(), "{}日趋势斜率，最多展示前一个交易日长期趋势斜率大于0的200家企业，长期趋势斜率为EMA65近20日斜率，短期趋势为EMA13近10日斜率".format(current_time))
+    feature_info = pd.merge(feature_info_ema65_slope, feature_info_ema13_slope, on=['company', 'trade_date'])
+    feature_info_amount_rank = pd.merge(feature_info, frame_amount_rank, on='company')
+
+    send("趋势斜率", feature_info_amount_rank.to_html(), "{}日趋势斜率，最多展示前一个交易日长期趋势斜率大于0的200家企业，长期趋势斜率为EMA65近20日斜率，短期趋势为EMA13近10日斜率;此外还展示当日交易量的排名信息。".format(current_time))
