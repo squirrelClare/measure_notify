@@ -25,7 +25,7 @@ if __name__ == '__main__':
 
     # ts_code_set = ','.join(['\'%s\''.format(e) for e in feature_info_ema65_slope['ts_code']])
     ts_code_set = ','.join(feature_info_ema65_slope['ts_code'].tolist())
-
+    print(ts_code_set)
     #   抽取特征数据
     sql_feature_ema13_slope ='''select company, trade_date, field, value 
     from (select * from t_feature_numberic where field ='SLOPE_EMA_13' and trade_date ='{0}' and ts_code in ({1})) a left join t_tscode_company b on a.ts_code =b.ts_code order 
