@@ -38,6 +38,6 @@ if __name__ == '__main__':
     frame_amount_rank = pd.read_sql_query(sql_amount_rank, engine_finance_db)
 
     feature_info = pd.merge(feature_info_ema13_slope, feature_info_ema65_slope, on=['company', 'trade_date'])
-    feature_info_amount_rank = pd.merge(feature_info, frame_amount_rank, on='company').sort_values()
+    feature_info_amount_rank = pd.merge(feature_info, frame_amount_rank, on='company')
 
     send("趋势斜率", feature_info_amount_rank.to_html(), "{}日趋势斜率，最多展示前一个交易日长期趋势斜率大于0的200家企业，长期趋势斜率为EMA65近20日斜率，短期趋势为EMA13近10日斜率;此外还展示当日交易量的排名信息。".format(current_time))
