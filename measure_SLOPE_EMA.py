@@ -24,7 +24,7 @@ if __name__ == '__main__':
     feature_info_ema65_slope = pd.read_sql_query(sql_feature_ema65_slope, engine_finance_db)
 
     # ts_code_set = ','.join(['\'%s\''.format(e) for e in feature_info_ema65_slope['ts_code']])
-    ts_code_set = ','.join(['\'%s\''.format(e) for e in feature_info_ema65_slope['ts_code'].tolist()])
+    ts_code_set = ','.join(['\'{0}\''.format(e) for e in feature_info_ema65_slope['ts_code'].tolist()])
     print(ts_code_set)
     #   抽取特征数据
     sql_feature_ema13_slope ='''select company, trade_date, field, value 
