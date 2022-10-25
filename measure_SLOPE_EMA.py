@@ -18,7 +18,7 @@ if __name__ == '__main__':
     last_cal_day = cal_day_info['cal_date'].values[-1]
 
     #   抽取特征数据
-    sql_feature_ema65_slope ='''select company, trade_date, field, value, ts_code 
+    sql_feature_ema65_slope ='''select company, trade_date, field, value, a.ts_code as ts_code 
     from (select * from t_feature_numberic where field ='SLOPE_EMA_65' and trade_date ='{0}' and value > 0 limit 200) a left join t_tscode_company b on a.ts_code =b.ts_code order 
     by value desc '''.format(last_cal_day)
     feature_info_ema65_slope = pd.read_sql_query(sql_feature_ema65_slope, engine_finance_db)
