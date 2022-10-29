@@ -41,7 +41,7 @@ if __name__ == '__main__':
     'TREND_EMA_13', 'CHANGE_TREND_EMA_65', 'CHANGE_TREND_EMA_13') and trade_date ='{0}' and ts_code in ({1})) a left join t_tscode_company b on a.ts_code =b.ts_code order 
     by value'''.format(last_cal_day, ts_code_set)
     feature_info_multi = pd.read_sql_query(sql_feature_multi, engine_finance_db)
-    feature_concat = pd.concat(feature_info_ema65_slope, feature_info_multi).reset_index(drop=True).pivot(index='company', columns='field', values='value')
+    feature_concat = pd.concat([feature_info_ema65_slope, feature_info_multi]).reset_index(drop=True).pivot(index='company', columns='field', values='value')
     feature_concat['company'] = feature_concat.index
     feature_concat.reset_index(drop=True, inplace=True)
     # print(feature_info_multi)
