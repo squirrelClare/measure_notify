@@ -43,7 +43,7 @@ if __name__ == '__main__':
     feature_info_multi = pd.read_sql_query(sql_feature_multi, engine_finance_db).pivot(index='company', columns='field', values='value')
     feature_info_multi['company'] = feature_info_multi.index
     feature_info_multi.reset_index(drop=True, inplace=True)
-    print(feature_info_multi)
+    # print(feature_info_multi)
     #   交易量排名
     sql_amount_rank = "select company, amount_rank from (select ts_code, RANK() OVER (ORDER BY amount DESC) as amount_rank  from t_daily_info where trade_date ='{0}' and ts_code in ({1})) a left join t_tscode_company b on a.ts_code =b.ts_code" \
         .format(last_cal_day, ts_code_set)
@@ -52,7 +52,7 @@ if __name__ == '__main__':
     feature_info = pd.merge(feature_info_multi, feature_info_ema65_slope, on=['company'])
     feature_info_amount_rank = pd.merge(feature_info, frame_amount_rank, on='company')#[['company', 'trade_date', 'value_x', 'value_y', 'ts_code', 'amount_rank']]
     # feature_info_amount_rank.rename(columns={'company': '公司名', 'trade_date': '交易日期', 'value_x': 'EMA13斜率', 'value_y': 'EMA65斜率', 'ts_code': '股票代码', 'amount_rank': '交易量排名'}, inplace=True)
-    print(feature_info_amount_rank)
+    # print(feature_info_amount_rank)
 
-    # send("趋势斜率", feature_info_amount_rank.to_html(),
-    #      "{}日趋势斜率，最多展示前一个交易日长期趋势斜率大于0的200家企业，长期趋势斜率为EMA65近20日斜率，短期趋势为EMA13近10日斜率;此外还展示当日交易量的排名信息。".format(current_time))
+    send("趋势斜率", feature_info_amount_rank.to_html(),
+         "{}日趋势斜率，最多展示前一个交易日长期趋势斜率大于0的200家企业，长期趋势斜率为EMA65近20日斜率，短期趋势为EMA13近10日斜率;此外还展示当日交易量的排名信息。".format(current_time))
