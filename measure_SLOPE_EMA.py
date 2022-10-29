@@ -46,7 +46,7 @@ if __name__ == '__main__':
     feature_concat.reset_index(drop=True, inplace=True)
     # print(feature_info_multi)
     #   交易量排名
-    sql_amount_rank = "select company, amount_rank, ts_code, trade_date  from (select ts_code, RANK() OVER (ORDER BY amount DESC) as amount_rank  from t_daily_info where trade_date ='{0}' and ts_code in ({1})) a left join t_tscode_company b on a.ts_code =b.ts_code" \
+    sql_amount_rank = "select company, amount_rank, a.ts_code as ts_code, trade_date  from (select ts_code, RANK() OVER (ORDER BY amount DESC) as amount_rank  from t_daily_info where trade_date ='{0}' and ts_code in ({1})) a left join t_tscode_company b on a.ts_code =b.ts_code" \
         .format(last_cal_day, ts_code_set)
     frame_amount_rank = pd.read_sql_query(sql_amount_rank, engine_finance_db)
 
