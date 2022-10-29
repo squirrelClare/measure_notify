@@ -51,5 +51,6 @@ if __name__ == '__main__':
     feature_info_amount_rank = pd.merge(feature_info, frame_amount_rank, on='company')[['company', 'trade_date', 'value_x', 'value_y', 'ts_code', 'amount_rank']]
     feature_info_amount_rank.rename(columns={'company': '公司名', 'trade_date': '交易日期', 'value_x': 'EMA13斜率', 'value_y': 'EMA65斜率', 'ts_code': '股票代码', 'amount_rank': '交易量排名'}, inplace=True)
 
+
     # send("趋势斜率", feature_info_amount_rank.to_html(),
     #      "{}日趋势斜率，最多展示前一个交易日长期趋势斜率大于0的200家企业，长期趋势斜率为EMA65近20日斜率，短期趋势为EMA13近10日斜率;此外还展示当日交易量的排名信息。".format(current_time))
