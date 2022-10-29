@@ -28,18 +28,27 @@ if __name__ == '__main__':
     # ts_code_set = ','.join(['\'%s\''.format(e) for e in feature_info_ema65_slope['ts_code']])
     ts_code_set = ','.join(['\'{0}\''.format(e) for e in feature_info_ema65_slope['ts_code'].tolist()])
     # print(ts_code_set)
+    # #   抽取特征数据
+    # sql_feature_ema13_slope = '''select company, trade_date, field, value
+    # from (select * from t_feature_numberic where field ='SLOPE_EMA_13' and trade_date ='{0}' and ts_code in ({1})) a left join t_tscode_company b on a.ts_code =b.ts_code order
+    # by value'''.format(last_cal_day, ts_code_set)
+    # feature_info_ema13_slope = pd.read_sql_query(sql_feature_ema13_slope, engine_finance_db)
+
+
     #   抽取特征数据
-    sql_feature_ema13_slope = '''select company, trade_date, field, value 
-    from (select * from t_feature_numberic where field ='SLOPE_EMA_13' and trade_date ='{0}' and ts_code in ({1})) a left join t_tscode_company b on a.ts_code =b.ts_code order 
+    sql_feature_multi = '''select company, field, value 
+    from (select * from t_feature_numberic where field in ('SLOPE_EMA_13', 'CONFIDENCE_EMA_65', 'CONFIDENCE_EMA_13', 'TREND_EMA_65', 
+    'TREND_EMA_13', 'CHANGE_TREND_EMA_65', 'CHANGE_TREND_EMA_13') and trade_date ='{0}' and ts_code in ({1})) a left join t_tscode_company b on a.ts_code =b.ts_code order 
     by value'''.format(last_cal_day, ts_code_set)
-    feature_info_ema13_slope = pd.read_sql_query(sql_feature_ema13_slope, engine_finance_db)
+    feature_info_multi = pd.read_sql_query(sql_feature_multi, engine_finance_db).pivot(index='company', columns='field', values='value').stack().reset_index()
+    print(feature_info_multi)
 
     #   交易量排名
     sql_amount_rank = "select company, amount_rank from (select ts_code, RANK() OVER (ORDER BY amount DESC) as amount_rank  from t_daily_info where trade_date ='{0}' and ts_code in ({1})) a left join t_tscode_company b on a.ts_code =b.ts_code" \
         .format(last_cal_day, ts_code_set)
     frame_amount_rank = pd.read_sql_query(sql_amount_rank, engine_finance_db)
 
-    feature_info = pd.merge(feature_info_ema13_slope, feature_info_ema65_slope, on=['company', 'trade_date'])
+    feature_info = pd.merge(feature_info_multi, feature_info_ema65_slope, on=['company', 'trade_date'])
     feature_info_amount_rank = pd.merge(feature_info, frame_amount_rank, on='company')[['company', 'trade_date', 'value_x', 'value_y', 'ts_code', 'amount_rank']]
     feature_info_amount_rank.rename(columns={'company': '公司名', 'trade_date': '交易日期', 'value_x': 'EMA13斜率', 'value_y': 'EMA65斜率', 'ts_code': '股票代码', 'amount_rank': '交易量排名'}, inplace=True)
 
