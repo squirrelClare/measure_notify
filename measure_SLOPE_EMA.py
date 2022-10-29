@@ -51,9 +51,15 @@ if __name__ == '__main__':
     frame_amount_rank = pd.read_sql_query(sql_amount_rank, engine_finance_db)
 
     # feature_info = pd.merge(feature_info_multi, feature_info_ema65_slope, on=['company'])
-    feature_info_amount_rank = pd.merge(feature_concat, frame_amount_rank, on='company')#[['company', 'trade_date', 'value_x', 'value_y', 'ts_code', 'amount_rank']]
-    # feature_info_amount_rank.rename(columns={'company': '公司名', 'trade_date': '交易日期', 'value_x': 'EMA13斜率', 'value_y': 'EMA65斜率', 'ts_code': '股票代码', 'amount_rank': '交易量排名'}, inplace=True)
+    feature_info_amount_rank = pd.merge(feature_concat, frame_amount_rank, on='company').sort_values(by='SLOPE_EMA_13')
+    feature_info_amount_rank.rename(columns={'company': '公司名', 'trade_date': '交易日期', 'SLOPE_EMA_13': 'EMA13斜率',
+                                             'SLOPE_EMA_65': 'EMA65斜率', 'ts_code': '股票代码', 'amount_rank': '交易量排名',
+                                             'CHANGE_TREND_EMA_13': 'EMA13_MK检验突变点个数', 'CHANGE_TREND_EMA_65': 'EMA65_MK检验突变点个数',
+                                             'CONFIDENCE_EMA_13': 'EMA13_MK检验置信度', 'CONFIDENCE_EMA_65': 'EMA65_MK检验置信度',
+                                             'TREND_EMA_13': 'EMA13_MK检验趋势', 'TREND_EMA_65': 'EMA65_MK检验趋势'}, inplace=True)
     # print(feature_info_amount_rank)
 
-    send("趋势斜率", feature_info_amount_rank.to_html(),
+    send("趋势斜率", feature_info_amount_rank[['公司名', '股票代码', '交易日期', '交易量排名', 'EMA65斜率', 'EMA65_MK检验置信度',
+                                           'EMA65_MK检验趋势', 'EMA65_MK检验突变点个数', 'EMA13斜率', 'EMA13_MK检验置信度',
+                                           'EMA13_MK检验趋势', 'EMA13_MK检验突变点个数']].to_html(),
          "{}日趋势斜率，最多展示前一个交易日长期趋势斜率大于0的200家企业，长期趋势斜率为EMA65近20日斜率，短期趋势为EMA13近10日斜率;此外还展示当日交易量的排名信息。".format(current_time))
