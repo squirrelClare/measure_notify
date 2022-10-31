@@ -60,6 +60,5 @@ if __name__ == '__main__':
     # print(feature_info_amount_rank)
 
     send("趋势斜率", feature_info_amount_rank[['公司名', '股票代码', '交易日期', '交易量排名', 'EMA65斜率', 'EMA65_MK检验置信度',
-                                           'EMA65_MK检验趋势', 'EMA65_MK检验突变点个数', 'EMA13斜率', 'EMA13_MK检验置信度',
-                                           'EMA13_MK检验趋势', 'EMA13_MK检验突变点个数', 'EMA13二阶差分']].to_html(),
+                                           'EMA65_MK检验趋势', 'EMA65_MK检验突变点个数', 'EMA13斜率', 'EMA13二阶差分']].to_html(),
          "{}日趋势斜率，最多展示前一个交易日长期趋势斜率大于0的200家企业，长期趋势斜率为EMA65近20日斜率，短期趋势为EMA13近10日斜率;此外还展示当日交易量的排名信息。".format(current_time))
