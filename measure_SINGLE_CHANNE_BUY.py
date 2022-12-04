@@ -35,7 +35,7 @@ if __name__ == '__main__':
     frame_amount_rank = pd.read_sql_query(sql_amount_rank, engine_finance_db)
 
     # feature_info = pd.merge(feature_info_multi, feature_info_ema65_slope, on=['company'])
-    feature_info_amount_rank = pd.merge(feature_info_single_channel, frame_amount_rank, on='company').sort_values(by='SLOPE_EMA_13')
+    feature_info_amount_rank = pd.merge(feature_info_single_channel, frame_amount_rank, on='company')
     feature_info_amount_rank.rename(columns={'company': '公司名', 'trade_date': '交易日期', 'SINGLE_CHANNEL_BUY': '单通道交易信号', 'amount_rank': '交易量排名'}, inplace=True)
     # print(feature_info_amount_rank)
 
