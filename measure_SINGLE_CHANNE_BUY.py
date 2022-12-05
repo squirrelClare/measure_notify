@@ -29,6 +29,8 @@ if __name__ == '__main__':
     ts_code_set = ','.join(['\'{0}\''.format(e) for e in feature_info_single_channel['ts_code'].tolist()])
 
     # print(feature_info_multi)
+
+    feature_info_single_channel = feature_info_single_channel.reset_index(drop=True).pivot(index='company', columns='field', values='value')
     #   交易量排名
     sql_amount_rank = "select company, amount_rank, a.ts_code as ts_code, trade_date  from (select ts_code, trade_date, RANK() OVER (ORDER BY amount DESC) as amount_rank  from t_daily_info where trade_date ='{0}' and ts_code in ({1})) a left join t_tscode_company b on a.ts_code =b.ts_code" \
         .format(last_cal_day, ts_code_set)
