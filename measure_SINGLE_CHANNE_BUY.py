@@ -21,7 +21,7 @@ if __name__ == '__main__':
 
     #   抽取特征数据
     sql_feature_single_channel = '''select company, trade_date, field, value, a.ts_code as ts_code 
-    from (select * from t_feature_numberic where field ='SINGLE_CHANNEL_BUY' and trade_date ='{0}' and value > 0 limit 200) a left join t_tscode_company b on a.ts_code =b.ts_code order 
+    from (select * from t_feature_numberic where field in ('SINGLE_CHANNEL_BUY','ABOVE_MA200') and trade_date ='{0}' and value > 0 limit 200) a left join t_tscode_company b on a.ts_code =b.ts_code order 
     by value desc '''.format(last_cal_day)
     feature_info_single_channel = pd.read_sql_query(sql_feature_single_channel, engine_finance_db)
 
@@ -38,7 +38,7 @@ if __name__ == '__main__':
 
     # feature_info = pd.merge(feature_info_multi, feature_info_ema65_slope, on=['company'])
     feature_info_amount_rank = pd.merge(feature_info_single_channel, frame_amount_rank, on='company')
-    feature_info_amount_rank.rename(columns={'company': '公司名', 'trade_date': '交易日期', 'SINGLE_CHANNEL_BUY': '单通道交易信号', 'amount_rank': '交易量排名'}, inplace=True)
+    feature_info_amount_rank.rename(columns={'company': '公司名', 'trade_date': '交易日期', 'SINGLE_CHANNEL_BUY': '单通道交易信号', 'amount_rank': '交易量排名', 'ABOVE_MA200': '是否高于MA200'}, inplace=True)
     # print(feature_info_amount_rank)
 
     # send("趋势斜率", feature_info_amount_rank[['公司名', '股票代码', '交易日期', '交易量排名', 'EMA65斜率', 'EMA65_MK检验置信度',

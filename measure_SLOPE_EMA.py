@@ -38,7 +38,7 @@ if __name__ == '__main__':
     #   抽取特征数据
     sql_feature_multi = '''select company, field, value 
     from (select * from t_feature_numberic where field in ('SLOPE_EMA_13', 'CONFIDENCE_EMA_65', 'CONFIDENCE_EMA_13', 'TREND_EMA_65', 
-    'TREND_EMA_13', 'CHANGE_TREND_EMA_65', 'CHANGE_TREND_EMA_13', 'DIFF_2_EMA_13', 'QUANTILE') and trade_date ='{0}' and ts_code in ({1})) a left join t_tscode_company b on a.ts_code =b.ts_code order 
+    'TREND_EMA_13', 'CHANGE_TREND_EMA_65', 'CHANGE_TREND_EMA_13', 'DIFF_2_EMA_13', 'QUANTILE', 'ABOVE_MA200') and trade_date ='{0}' and ts_code in ({1})) a left join t_tscode_company b on a.ts_code =b.ts_code order 
     by value'''.format(last_cal_day, ts_code_set)
     feature_info_multi = pd.read_sql_query(sql_feature_multi, engine_finance_db)
     feature_concat = pd.concat([feature_info_ema65_slope, feature_info_multi]).reset_index(drop=True).pivot(index='company', columns='field', values='value')
@@ -58,7 +58,7 @@ if __name__ == '__main__':
                                              # 'CONFIDENCE_EMA_13': 'EMA13_MK检验置信度', 'CONFIDENCE_EMA_65': 'EMA65_MK检验置信度',
                                              # 'TREND_EMA_13': 'EMA13_MK检验趋势', 'TREND_EMA_65': 'EMA65_MK检验趋势',
                                              'DIFF_2_EMA_13': 'EMA13二阶差分',
-                                             'QUANTILE': "收盘价分位"}, inplace=True)
+                                             'QUANTILE': "收盘价分位", 'ABOVE_MA200': '是否高于MA200'}, inplace=True)
     # print(feature_info_amount_rank)
 
     # send("趋势斜率", feature_info_amount_rank[['公司名', '股票代码', '交易日期', '交易量排名', 'EMA65斜率', 'EMA65_MK检验置信度',
