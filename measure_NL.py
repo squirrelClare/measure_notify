@@ -1,8 +1,4 @@
-# """
-# cron: 10 30 8 * * ?
-# new Env('量化--新低指标');
-# """
-#
+
 # import pandas as pd
 # from notify import pg_engine_finance, send
 # import datetime

@@ -1,7 +1,3 @@
-# """
-# cron: 10 31 8 * * ?
-# new Env('量化--EMA65近20日的斜率');
-# """
 #
 # import pandas as pd
 # from notify import pg_engine_finance, send

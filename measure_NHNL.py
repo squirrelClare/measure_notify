@@ -1,7 +1,3 @@
-# """
-# cron: 0 30 8 * * ?
-# new Env('量化--新高新低指标');
-# """
 #
 # import pandas as pd
 # from notify import pg_engine_finance, send
