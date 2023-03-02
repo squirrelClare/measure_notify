@@ -21,7 +21,7 @@ if __name__ == '__main__':
 
     #   抽取特征数据
     sql_feature_single_channel = '''select company, trade_date, field, value, a.ts_code as ts_code 
-    from (select * from t_feature_numberic where field in ('SINGLE_CHANNEL_BUY','ABOVE_MA200') and trade_date ='{0}' and value > 0 limit 200) a left join t_tscode_company b on a.ts_code =b.ts_code order 
+    from (select * from t_feature_numberic where field = 'SINGLE_CHANNEL_BUY' and trade_date ='{0}' and value > 0 limit 200) a left join t_tscode_company b on a.ts_code =b.ts_code order 
     by value desc '''.format(last_cal_day)
     feature_info_single_channel = pd.read_sql_query(sql_feature_single_channel, engine_finance_db)
 
@@ -32,7 +32,9 @@ if __name__ == '__main__':
 
     feature_info_single_channel = feature_info_single_channel.reset_index(drop=True).pivot(index='company', columns='field', values='value')
     #   交易量排名
-    sql_amount_rank = "select company, amount_rank, a.ts_code as ts_code, trade_date  from (select ts_code, trade_date, RANK() OVER (ORDER BY amount DESC) as amount_rank  from t_daily_info where trade_date ='{0}' and ts_code in ({1})) a left join t_tscode_company b on a.ts_code =b.ts_code" \
+    sql_amount_rank = "select company, amount_rank, a.ts_code as ts_code, trade_date  from (select ts_code, trade_date, " \
+                      "RANK() OVER (ORDER BY amount DESC) as amount_rank  from t_daily_info where trade_date ='{0}' " \
+                      "and ts_code in ({1})) a left join t_tscode_company b on a.ts_code =b.ts_code" \
         .format(last_cal_day, ts_code_set)
     frame_amount_rank = pd.read_sql_query(sql_amount_rank, engine_finance_db)
 
